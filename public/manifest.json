@@ -1,0 +1,16 @@
+{
+  "name": "PixelShift",
+  "short_name": "PixelShift",
+  "description": "Privacy-first, client-side WebP converter powered by WebAssembly",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}
