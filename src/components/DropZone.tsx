@@ -23,7 +23,9 @@ export default function DropZone({ onFiles, disabled }: Props) {
       onDrop={e => { e.preventDefault(); setDragging(false); handle(e.dataTransfer.files) }}
       onClick={() => { if (!disabled) document.getElementById('file-input')?.click() }}
       role="button"
+      tabIndex={0}
       aria-label="Drop images here or click to select"
+      onKeyDown={e => e.key === 'Enter' && document.getElementById('file-input')?.click()}
     >
       <input
         id="file-input"
@@ -33,6 +35,7 @@ export default function DropZone({ onFiles, disabled }: Props) {
         hidden
         onChange={e => handle(e.target.files)}
       />
+      <div className="drop-icon">🖼️</div>
       <p>Drop images here or <span className="link">click to select</span></p>
       <small>JPEG · PNG · GIF · TIFF · BMP · AVIF</small>
     </div>

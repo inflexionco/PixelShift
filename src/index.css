@@ -3,30 +3,357 @@
 :root {
   --bg: #0f172a;
   --surface: #1e293b;
+  --surface-hover: #263248;
   --border: #334155;
+  --border-hover: #6366f1;
   --accent: #6366f1;
+  --accent-dim: rgba(99, 102, 241, 0.15);
   --text: #f1f5f9;
   --muted: #94a3b8;
   --error: #f87171;
   --success: #34d399;
+  --radius: 12px;
+  --radius-sm: 8px;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100dvh;
+  line-height: 1.5;
 }
+
+/* ── App Shell ───────────────────────────────────────────── */
 
 .app {
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 3rem 1.25rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-header { text-align: center; margin-bottom: 2rem; }
-header h1 { font-size: 2rem; color: var(--accent); }
-header .tagline { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; }
+/* ── Header ──────────────────────────────────────────────── */
 
-.status { text-align: center; padding: 1rem; color: var(--muted); }
-.status.error { color: var(--error); }
+header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header .tagline {
+  color: var(--muted);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+header .tagline span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+header .tagline span::before {
+  content: '·';
+  color: var(--border);
+}
+
+header .tagline span:first-child::before {
+  display: none;
+}
+
+/* ── Options Panel ───────────────────────────────────────── */
+
+.options {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  align-items: center;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.options label strong {
+  color: var(--accent);
+  min-width: 2ch;
+  display: inline-block;
+}
+
+.options input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 140px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+
+.options input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.options input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px var(--accent-dim);
+}
+
+.options input[type='range']:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.options .checkbox {
+  gap: 0.5rem;
+}
+
+.options input[type='checkbox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.options input[type='checkbox']:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.options input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 1px;
+  width: 6px;
+  height: 9px;
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ── Drop Zone ───────────────────────────────────────────── */
+
+.dropzone {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 3.5rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible {
+  border-color: var(--border-hover);
+  background: var(--surface-hover);
+  outline: none;
+}
+
+.dropzone.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  transform: scale(1.01);
+}
+
+.dropzone.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dropzone .drop-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.dropzone p {
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.dropzone .link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dropzone small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Status ──────────────────────────────────────────────── */
+
+.status {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.status.error {
+  color: var(--error);
+  border-color: var(--error);
+  background: rgba(248, 113, 113, 0.08);
+}
+
+.status .spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Download List ───────────────────────────────────────── */
+
+.download-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.download-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.15s;
+}
+
+.download-item:hover {
+  border-color: var(--border-hover);
+}
+
+.download-item .file-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.download-item .file-name {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.download-item .file-size {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.download-item .size-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--success);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.download-item button {
+  flex-shrink: 0;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.download-item button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.download-item button:active {
+  transform: translateY(0);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .app { padding: 2rem 1rem 3rem; }
+  header h1 { font-size: 1.75rem; }
+  .options { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .options input[type='range'] { width: 100%; }
+  .dropzone { padding: 2.5rem 1.25rem; }
+}

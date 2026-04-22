@@ -22,15 +22,26 @@ export default function App() {
     <div className="app">
       <header>
         <h1>PixelShift</h1>
-        <p className="tagline">100% private · no uploads · WebAssembly powered</p>
+        <p className="tagline">
+          <span>100% private</span>
+          <span>no uploads</span>
+          <span>WebAssembly powered</span>
+        </p>
       </header>
 
-      <main>
+      <main style={{ display: 'contents' }}>
         <QualitySlider opts={opts} onChange={setOpts} />
         <DropZone onFiles={handleFiles} disabled={status === 'loading'} />
 
-        {status === 'loading' && <p className="status">Converting...</p>}
-        {status === 'error'   && <p className="status error">{error}</p>}
+        {status === 'loading' && (
+          <p className="status">
+            <span className="spinner" />
+            Converting…
+          </p>
+        )}
+        {status === 'error' && (
+          <p className="status error">{error}</p>
+        )}
 
         <DownloadList results={results} />
       </main>

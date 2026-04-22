@@ -12,8 +12,11 @@ export default function DownloadList({ results }: Props) {
     <ul className="download-list">
       {results.map((r, i) => (
         <li key={i} className="download-item">
-          <span className="file-name">{r.originalName} → {r.fileName}</span>
-          <span className="file-size">{formatBytes(r.sizeBytes)}</span>
+          <div className="file-info">
+            <span className="file-name">{r.originalName} → {r.fileName}</span>
+            <span className="file-size">{formatBytes(r.sizeBytes)}</span>
+          </div>
+          <span className="size-badge">WebP</span>
           <button onClick={() => triggerDownload(r.blobURL, r.fileName)}>
             Download
           </button>
