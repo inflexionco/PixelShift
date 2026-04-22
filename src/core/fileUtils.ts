@@ -1,4 +1,4 @@
-export const SUPPORTED_MIME_TYPES = [
+export const SUPPORTED_IMAGE_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/gif',
@@ -8,9 +8,29 @@ export const SUPPORTED_MIME_TYPES = [
   'image/heic',
 ]
 
+export const SUPPORTED_VIDEO_MIME_TYPES = [
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'video/x-matroska',
+  'video/webm',
+  'video/mpeg',
+  'video/ogg',
+]
+
+export const SUPPORTED_MIME_TYPES = [
+  ...SUPPORTED_IMAGE_MIME_TYPES,
+  ...SUPPORTED_VIDEO_MIME_TYPES,
+]
+
 export function isSupportedFile(file: File): boolean {
   return SUPPORTED_MIME_TYPES.includes(file.type) ||
-    /\.(jpe?g|png|gif|tiff?|bmp|avif|heic)$/i.test(file.name)
+    /\.(jpe?g|png|gif|tiff?|bmp|avif|heic|mp4|mov|avi|mkv|webm|mpg|mpeg|ogv)$/i.test(file.name)
+}
+
+export function isVideoFile(file: File): boolean {
+  return SUPPORTED_VIDEO_MIME_TYPES.includes(file.type) ||
+    /\.(mp4|mov|avi|mkv|webm|mpg|mpeg|ogv)$/i.test(file.name)
 }
 
 export function triggerDownload(blobURL: string, fileName: string): void {

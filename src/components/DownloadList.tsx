@@ -16,7 +16,7 @@ export default function DownloadList({ results }: Props) {
             <span className="file-name">{r.originalName} → {r.fileName}</span>
             <span className="file-size">{formatBytes(r.sizeBytes)}</span>
           </div>
-          <span className="size-badge">WebP</span>
+          <span className="size-badge">{r.format.toUpperCase()}</span>
           <button onClick={() => triggerDownload(r.blobURL, r.fileName)}>
             Download
           </button>

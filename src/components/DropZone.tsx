@@ -30,14 +30,15 @@ export default function DropZone({ onFiles, disabled }: Props) {
       <input
         id="file-input"
         type="file"
-        accept="image/jpeg,image/png,image/gif,image/tiff,image/bmp,image/avif"
+        accept="image/jpeg,image/png,image/gif,image/tiff,image/bmp,image/avif,video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/mpeg,video/ogg"
         multiple
         hidden
         onChange={e => handle(e.target.files)}
       />
       <div className="drop-icon">🖼️</div>
-      <p>Drop images here or <span className="link">click to select</span></p>
-      <small>JPEG · PNG · GIF · TIFF · BMP · AVIF</small>
+      <p>Drop files here or <span className="link">click to select</span></p>
+      <small>Images: JPEG · PNG · GIF · TIFF · BMP · AVIF</small>
+      <small>Videos: MP4 · MOV · AVI · MKV · WebM · MPEG</small>
     </div>
   )
 }

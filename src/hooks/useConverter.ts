@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { convertToWebP, ConvertOptions, ConversionResult } from '../core/converter'
+import { convertFile, ConvertOptions, ConversionResult } from '../core/converter'
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
 
@@ -15,7 +15,7 @@ export function useConverter() {
     try {
       // Sequential processing — bounds peak memory to O(max single file size)
       for (const file of files) {
-        const result = await convertToWebP(file, opts)
+        const result = await convertFile(file, opts)
         setResults(prev => [...prev, result])
       }
       setStatus('done')

@@ -8,6 +8,7 @@ import type { ConvertOptions } from './core/converter'
 export default function App() {
   const { convert, reset, status, results, error } = useConverter()
   const [opts, setOpts] = useState<ConvertOptions>({
+    format: 'webp',
     quality: 80,
     lossless: false,
     preserveAnimation: true,
