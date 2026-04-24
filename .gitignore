@@ -3,3 +3,7 @@ dist/
 .DS_Store
 *.local
 .env*
+
+# Wasm binary — too large for git (31MB); copy from node_modules with:
+# cp node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.wasm public/wasm/
+public/wasm/ffmpeg-core.wasm

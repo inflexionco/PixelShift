@@ -1,10 +1,7 @@
 import { FFmpeg } from '@ffmpeg/ffmpeg'
-import { toBlobURL } from '@ffmpeg/util'
 
 let instance: FFmpeg | null = null
 let loadPromise: Promise<FFmpeg> | null = null
-
-const BASE_URL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm'
 
 export async function getFFmpeg(): Promise<FFmpeg> {
   if (instance?.loaded) return instance
@@ -13,10 +10,10 @@ export async function getFFmpeg(): Promise<FFmpeg> {
   loadPromise = (async () => {
     const ffmpeg = new FFmpeg()
 
+    // Load from self-hosted /wasm/ — no CDN, no CORP issues, fully private
     await ffmpeg.load({
-      coreURL:   await toBlobURL(`${BASE_URL}/ffmpeg-core.js`,        'text/javascript'),
-      wasmURL:   await toBlobURL(`${BASE_URL}/ffmpeg-core.wasm`,      'application/wasm'),
-      workerURL: await toBlobURL(`${BASE_URL}/ffmpeg-core.worker.js`, 'text/javascript'),
+      coreURL: '/wasm/ffmpeg-core.js',
+      wasmURL: '/wasm/ffmpeg-core.wasm',
     })
 
     instance = ffmpeg

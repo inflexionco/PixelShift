@@ -1,16 +1,15 @@
-// Service Worker — caches Wasm binary after first load for offline use
+// Service Worker — caches self-hosted Wasm binary after first load for offline use
 // User images are NEVER cached here
 
-const CACHE_NAME = 'pixelshift-wasm-v1'
-const WASM_URLS = [
-  'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.js',
-  'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.wasm',
-  'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm/ffmpeg-core.worker.js',
+const CACHE_NAME = 'pixelshift-wasm-v2'
+const WASM_FILES = [
+  '/wasm/ffmpeg-core.js',
+  '/wasm/ffmpeg-core.wasm',
 ]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(WASM_URLS))
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(WASM_FILES))
   )
 })
 
@@ -23,8 +22,7 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-  // Only intercept Wasm CDN requests — never intercept blob: or local requests
-  if (WASM_URLS.some((url) => event.request.url.startsWith(url.split('/esm/')[0]))) {
+  if (WASM_FILES.some((path) => event.request.url.endsWith(path))) {
     event.respondWith(
       caches.match(event.request).then((cached) => cached || fetch(event.request))
     )

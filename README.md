@@ -27,6 +27,10 @@
 
 ```bash
 npm install
+
+# Copy the Wasm binary from node_modules (required — too large for git)
+cp node_modules/@ffmpeg/core/dist/esm/ffmpeg-core.wasm public/wasm/
+
 npm run dev
 ```
 
