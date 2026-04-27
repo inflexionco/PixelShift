@@ -10,10 +10,14 @@ export async function getFFmpeg(): Promise<FFmpeg> {
   loadPromise = (async () => {
     const ffmpeg = new FFmpeg()
 
-    // Load from self-hosted /wasm/ — no CDN, no CORP issues, fully private
+    // Use new URL() to construct absolute URLs pointing to public/wasm/
+    // This bypasses Vite's module resolver — public/ files must be
+    // referenced via URL, never imported through the module graph.
+    const base = new URL('/wasm/', window.location.origin)
+
     await ffmpeg.load({
-      coreURL: '/wasm/ffmpeg-core.js',
-      wasmURL: '/wasm/ffmpeg-core.wasm',
+      coreURL: new URL('ffmpeg-core.js',   base).href,
+      wasmURL: new URL('ffmpeg-core.wasm', base).href,
     })
 
     instance = ffmpeg
