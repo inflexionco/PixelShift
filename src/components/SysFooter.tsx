@@ -25,7 +25,7 @@ export default function SysFooter() {
   }, [])
 
   return (
-    <footer className="sys-footer">
+    <div className="sys-footer">
       <div className="sys-stat">
         <span className="sys-stat-label">Engine</span>
         <span className="sys-stat-value">{info.engine}</span>
@@ -38,6 +38,6 @@ export default function SysFooter() {
         <span className="sys-stat-label">Buffer</span>
         <span className="sys-stat-value">{info.buffer}</span>
       </div>
-    </footer>
+    </div>
   )
 }

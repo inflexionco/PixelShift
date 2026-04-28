@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import SysFooter from './components/SysFooter'
+import PageFooter from './components/PageFooter'
 import DropZone from './components/DropZone'
 import QualitySlider from './components/QualitySlider'
 import DownloadList from './components/DownloadList'
@@ -68,6 +69,8 @@ function ConvertPage() {
           </button>
         </div>
 
+        <SysFooter />
+
         {status === 'error' && error && (
           <div className="status-bar error">
             <span className="status-bar-dot" />
@@ -98,7 +101,7 @@ export default function App() {
         <Route path="/batch" element={<BatchPage />} />
         <Route path="/history" element={<HistoryPage />} />
       </Routes>
-      <SysFooter />
+      <PageFooter />
     </div>
   )
 }

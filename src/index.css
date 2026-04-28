@@ -610,13 +610,10 @@ body {
 
 .btn-download:hover, .btn-delete:hover { opacity: 0.75; }
 
-/* ── System Footer ──────────────────────────────────────── */
+/* ── System Stats (inside converter card) ───────────────── */
 
 .sys-footer {
-  width: 100%;
-  max-width: 660px;
-  margin-top: 2rem;
-  padding: 1.25rem 0;
+  padding: 1.25rem 2rem;
   border-top: 1px solid var(--border);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -642,26 +639,29 @@ body {
 /* ── Page Footer ────────────────────────────────────────── */
 
 .page-footer {
-  padding: 1.25rem 2rem;
+  padding: 0.9rem 2rem;
   border-top: 1px solid var(--border);
+  background: var(--bg);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-.page-footer-links { display: flex; gap: 1.5rem; }
+.page-footer-copy { color: var(--muted); }
 
-.page-footer a {
+.page-footer-links { display: flex; gap: 1.75rem; }
+
+.page-footer-links a {
   color: var(--muted);
   text-decoration: none;
   transition: color 0.15s;
 }
 
-.page-footer a:hover { color: var(--text); }
+.page-footer-links a:hover { color: var(--text); }
 
 /* ── Stub pages (Batch / History) ───────────────────────── */
 
@@ -692,8 +692,9 @@ body {
 @media (max-width: 600px) {
   .navbar-links { display: none; }
   .options-panel { grid-template-columns: 1fr; }
-  .sys-footer { grid-template-columns: 1fr 1fr; }
+  .sys-footer { grid-template-columns: 1fr 1fr; padding: 1rem 1.25rem; }
   .page { padding: 3.5rem 1rem 1.5rem; }
   .options-panel, .convert-btn-wrap { padding: 1.25rem; }
   .download-item { padding: 0.75rem 1.25rem; }
+  .page-footer { padding: 0.75rem 1.25rem; }
 }
