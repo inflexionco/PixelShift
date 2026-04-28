@@ -1,47 +1,69 @@
 import type { ConvertOptions, OutputFormat } from '../core/converter'
+import { IMAGE_FORMATS, VIDEO_FORMATS } from '../core/converter'
 
 interface Props {
   opts: ConvertOptions
   onChange: (opts: ConvertOptions) => void
 }
 
-const FORMATS: { value: OutputFormat; label: string }[] = [
-  { value: 'webp', label: 'WebP' },
-  { value: 'webm', label: 'WebM' },
-]
+const FORMAT_LABELS: Record<OutputFormat, string> = {
+  webp: 'WebP', png: 'PNG', jpg: 'JPG', gif: 'GIF',
+  webm: 'WebM', mp4: 'MP4',
+}
 
 export default function QualitySlider({ opts, onChange }: Props) {
-  const isWebP = opts.format === 'webp'
+  const isWebP    = opts.format === 'webp'
+  const isLossless = opts.format === 'png'  // PNG is always lossless
+  const isVideo   = VIDEO_FORMATS.includes(opts.format)
 
   return (
     <div className="options">
-      <label className="format-toggle">
-        Output:
+
+      <div className="format-group">
+        <span className="format-group-label">Image</span>
         <div className="format-buttons">
-          {FORMATS.map(f => (
+          {IMAGE_FORMATS.map(f => (
             <button
-              key={f.value}
-              className={`format-btn ${opts.format === f.value ? 'active' : ''}`}
-              onClick={() => onChange({ ...opts, format: f.value })}
+              key={f}
               type="button"
+              className={`format-btn ${opts.format === f ? 'active' : ''}`}
+              onClick={() => onChange({ ...opts, format: f })}
             >
-              {f.label}
+              {FORMAT_LABELS[f]}
             </button>
           ))}
         </div>
-      </label>
+      </div>
 
-      <label>
-        Quality: <strong>{opts.lossless ? 'Lossless' : opts.quality}</strong>
-        <input
-          type="range"
-          min={1}
-          max={100}
-          value={opts.quality}
-          disabled={opts.lossless && isWebP}
-          onChange={e => onChange({ ...opts, quality: Number(e.target.value) })}
-        />
-      </label>
+      <div className="format-group">
+        <span className="format-group-label">Video</span>
+        <div className="format-buttons">
+          {VIDEO_FORMATS.map(f => (
+            <button
+              key={f}
+              type="button"
+              className={`format-btn ${opts.format === f ? 'active' : ''}`}
+              onClick={() => onChange({ ...opts, format: f })}
+            >
+              {FORMAT_LABELS[f]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {!isLossless && (
+        <label>
+          Quality: <strong>{isWebP && opts.lossless ? 'Lossless' : opts.quality}</strong>
+          <input
+            type="range"
+            min={1}
+            max={100}
+            value={opts.quality}
+            disabled={isWebP && opts.lossless}
+            onChange={e => onChange({ ...opts, quality: Number(e.target.value) })}
+          />
+        </label>
+      )}
 
       {isWebP && (
         <>
@@ -63,6 +85,13 @@ export default function QualitySlider({ opts, onChange }: Props) {
           </label>
         </>
       )}
+
+      {isVideo && (
+        <p className="format-note">
+          {opts.format === 'mp4' ? 'H.264 + AAC' : 'VP9 + Opus'} · Quality controls bitrate via CRF
+        </p>
+      )}
+
     </div>
   )
 }

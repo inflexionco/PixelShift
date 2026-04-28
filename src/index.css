@@ -78,14 +78,21 @@ header .tagline span:first-child::before {
   display: none;
 }
 
-/* ── Format Toggle ───────────────────────────────────────── */
+/* ── Format Groups ───────────────────────────────────────── */
 
-.format-toggle {
+.format-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  color: var(--text);
+  gap: 0.6rem;
+}
+
+.format-group-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  min-width: 3rem;
 }
 
 .format-buttons {
@@ -117,6 +124,13 @@ header .tagline span:first-child::before {
 .format-btn:not(.active):hover {
   background: var(--surface-hover);
   color: var(--text);
+}
+
+.format-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  width: 100%;
+  padding-top: 0.25rem;
 }
 
 /* ── Options Panel ───────────────────────────────────────── */
@@ -367,12 +381,16 @@ header .tagline span:first-child::before {
   flex-shrink: 0;
 }
 
-.download-item button {
+.item-actions {
+  display: flex;
+  gap: 0.4rem;
   flex-shrink: 0;
-  padding: 0.4rem 1rem;
+}
+
+.btn-download,
+.btn-delete {
+  padding: 0.4rem 0.9rem;
   border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: white;
   font-size: 0.82rem;
   font-weight: 600;
   border: none;
@@ -380,12 +398,25 @@ header .tagline span:first-child::before {
   transition: opacity 0.15s, transform 0.1s;
 }
 
-.download-item button:hover {
-  opacity: 0.85;
+.btn-download {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-delete {
+  background: transparent;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+.btn-download:hover,
+.btn-delete:hover {
+  opacity: 0.8;
   transform: translateY(-1px);
 }
 
-.download-item button:active {
+.btn-download:active,
+.btn-delete:active {
   transform: translateY(0);
 }
 

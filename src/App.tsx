@@ -6,7 +6,7 @@ import { useState } from 'react'
 import type { ConvertOptions } from './core/converter'
 
 export default function App() {
-  const { convert, reset, status, results, error } = useConverter()
+  const { convert, removeResult, status, results, error } = useConverter()
   const [opts, setOpts] = useState<ConvertOptions>({
     format: 'webp',
     quality: 80,
@@ -14,10 +14,8 @@ export default function App() {
     preserveAnimation: true,
   })
 
-  const handleFiles = (files: File[]) => {
-    reset()
-    convert(files, opts)
-  }
+  // convert() clears previous results internally before starting
+  const handleFiles = (files: File[]) => convert(files, opts)
 
   return (
     <div className="app">
@@ -44,7 +42,7 @@ export default function App() {
           <p className="status error">{error}</p>
         )}
 
-        <DownloadList results={results} />
+        <DownloadList results={results} onRemove={removeResult} />
       </main>
     </div>
   )
