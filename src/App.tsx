@@ -4,9 +4,12 @@ import QualitySlider from './components/QualitySlider'
 import DownloadList from './components/DownloadList'
 import { useState } from 'react'
 import type { ConvertOptions } from './core/converter'
+import { getAvailableFormatsForBatch } from './core/fileUtils'
 
 export default function App() {
   const { convert, removeResult, status, results, error } = useConverter()
+
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [opts, setOpts] = useState<ConvertOptions>({
     format: 'webp',
     quality: 80,
@@ -14,8 +17,18 @@ export default function App() {
     preserveAnimation: true,
   })
 
-  // convert() clears previous results internally before starting
-  const handleFiles = (files: File[]) => convert(files, opts)
+  const availableFormats = getAvailableFormatsForBatch(pendingFiles)
+
+  const handleFiles = (files: File[]) => {
+    const formats = getAvailableFormatsForBatch(files)
+    setPendingFiles(files)
+
+    // If the currently selected format isn't valid for the new files, switch to first available
+    const nextFormat = formats.includes(opts.format) ? opts.format : formats[0]
+    const nextOpts = { ...opts, format: nextFormat }
+    setOpts(nextOpts)
+    convert(files, nextOpts)
+  }
 
   return (
     <div className="app">
@@ -29,7 +42,11 @@ export default function App() {
       </header>
 
       <main style={{ display: 'contents' }}>
-        <QualitySlider opts={opts} onChange={setOpts} />
+        <QualitySlider
+          opts={opts}
+          onChange={setOpts}
+          availableFormats={availableFormats}
+        />
         <DropZone onFiles={handleFiles} disabled={status === 'loading'} />
 
         {status === 'loading' && (

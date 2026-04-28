@@ -133,6 +133,13 @@ header .tagline span:first-child::before {
   padding-top: 0.25rem;
 }
 
+.format-placeholder {
+  font-size: 0.82rem;
+  color: var(--muted);
+  padding: 0.25rem 0.5rem;
+  font-style: italic;
+}
+
 /* ── Options Panel ───────────────────────────────────────── */
 
 .options {

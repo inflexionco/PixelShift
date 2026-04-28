@@ -28,8 +28,6 @@ const FORMAT_MIME: Record<OutputFormat, string> = {
   jpg:  'image/jpeg',
 }
 
-export const IMAGE_FORMATS: OutputFormat[] = ['webp', 'png', 'jpg', 'gif']
-export const VIDEO_FORMATS: OutputFormat[] = ['webm', 'mp4']
 
 export async function convertFile(
   file: File,
