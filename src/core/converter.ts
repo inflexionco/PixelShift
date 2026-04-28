@@ -43,7 +43,7 @@ export async function convertFile(
     await ffmpeg.writeFile(inputName, await fetchFile(file))
     await ffmpeg.exec(buildArgs(inputName, outputName, opts))
 
-    const data = await ffmpeg.readFile(outputName) as Uint8Array
+    const data = await ffmpeg.readFile(outputName) as Uint8Array<ArrayBuffer>
     const blob = new Blob([data], { type: FORMAT_MIME[opts.format] })
     const blobURL = URL.createObjectURL(blob)
 

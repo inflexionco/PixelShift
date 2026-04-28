@@ -1,12 +1,17 @@
-import { useConverter } from './hooks/useConverter'
+import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import SysFooter from './components/SysFooter'
 import DropZone from './components/DropZone'
 import QualitySlider from './components/QualitySlider'
 import DownloadList from './components/DownloadList'
-import { useState } from 'react'
+import BatchPage from './pages/BatchPage'
+import HistoryPage from './pages/HistoryPage'
+import { useConverter } from './hooks/useConverter'
 import type { ConvertOptions } from './core/converter'
 import { getAvailableFormatsForBatch } from './core/fileUtils'
 
-export default function App() {
+function ConvertPage() {
   const { convert, removeResult, status, results, error } = useConverter()
 
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
@@ -22,45 +27,78 @@ export default function App() {
   const handleFiles = (files: File[]) => {
     const formats = getAvailableFormatsForBatch(files)
     setPendingFiles(files)
-
-    // If the currently selected format isn't valid for the new files, switch to first available
     const nextFormat = formats.includes(opts.format) ? opts.format : formats[0]
-    const nextOpts = { ...opts, format: nextFormat }
-    setOpts(nextOpts)
-    convert(files, nextOpts)
+    setOpts(prev => ({ ...prev, format: nextFormat }))
+  }
+
+  const handleConvert = () => {
+    if (!pendingFiles.length || status === 'loading') return
+    convert(pendingFiles, opts)
   }
 
   return (
-    <div className="app">
-      <header>
-        <h1>PixelShift</h1>
-        <p className="tagline">
-          <span>100% private</span>
-          <span>no uploads</span>
-          <span>WebAssembly powered</span>
-        </p>
-      </header>
+    <div className="page">
+      <div className="converter-card">
+        <DropZone
+          files={pendingFiles}
+          onFiles={handleFiles}
+          disabled={status === 'loading'}
+        />
 
-      <main style={{ display: 'contents' }}>
         <QualitySlider
           opts={opts}
           onChange={setOpts}
           availableFormats={availableFormats}
         />
-        <DropZone onFiles={handleFiles} disabled={status === 'loading'} />
 
-        {status === 'loading' && (
-          <p className="status">
-            <span className="spinner" />
-            Converting…
-          </p>
-        )}
-        {status === 'error' && (
-          <p className="status error">{error}</p>
+        <div className="convert-btn-wrap">
+          <button
+            className="convert-btn"
+            onClick={handleConvert}
+            disabled={!pendingFiles.length || status === 'loading'}
+          >
+            {status === 'loading' ? (
+              <>
+                <span className="spinner" />
+                CONVERTING…
+              </>
+            ) : (
+              'EXECUTE CONVERSION'
+            )}
+          </button>
+        </div>
+
+        {status === 'error' && error && (
+          <div className="status-bar error">
+            <span className="status-bar-dot" />
+            {error}
+          </div>
         )}
 
-        <DownloadList results={results} onRemove={removeResult} />
-      </main>
+        {results.length > 0 && (
+          <div className="results-wrap">
+            <div className="results-header">
+              <span className="results-label">OUTPUT</span>
+              <span className="results-count">{results.length} FILE{results.length > 1 ? 'S' : ''}</span>
+            </div>
+            <DownloadList results={results} onRemove={removeResult} />
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <div className="shell">
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<ConvertPage />} />
+        <Route path="/batch" element={<BatchPage />} />
+        <Route path="/history" element={<HistoryPage />} />
+      </Routes>
+      <SysFooter />
     </div>
   )
 }
