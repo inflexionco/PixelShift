@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import SysFooter from './components/SysFooter'
@@ -11,6 +11,7 @@ import HistoryPage from './pages/HistoryPage'
 import { useConverter } from './hooks/useConverter'
 import type { ConvertOptions } from './core/converter'
 import { getAvailableFormatsForBatch } from './core/fileUtils'
+import { appendEntry } from './core/history'
 
 function ConvertPage() {
   const { convert, removeResult, status, results, error } = useConverter()
@@ -36,6 +37,24 @@ function ConvertPage() {
     if (!pendingFiles.length || status === 'loading') return
     convert(pendingFiles, opts)
   }
+
+  // Log to history once when a batch of conversions finishes
+  const loggedRef = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    if (status !== 'done') return
+    results.forEach(r => {
+      if (loggedRef.current.has(r.blobURL)) return
+      loggedRef.current.add(r.blobURL)
+      appendEntry({
+        originalName: r.originalName,
+        outputName: r.fileName,
+        originalSize: pendingFiles.find(f => f.name === r.originalName)?.size ?? 0,
+        outputSize: r.sizeBytes,
+        format: r.format,
+        source: 'convert',
+      })
+    })
+  }, [status, results, pendingFiles])
 
   return (
     <div className="page">
